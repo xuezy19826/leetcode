@@ -21,14 +21,14 @@ public class Demo003 {
 		String tempStr = "";
 		for(int i=0;i<s.length();i++) {
 			tempStr = String.valueOf(s.charAt(i));
-			// 包含字符的时候，tempList 转字符串放入set结果集中  给I赋值重新从重复点的下一个位置循环
+			// 包含字符的时候，字符串长度放入set结果集中  给I赋值重新从重复点的下一个位置循环
 			if (sf.toString().contains(tempStr)) {
 				res.add(sf.length());
 				s = s.substring(s.indexOf(tempStr) + 1);
 				i = -1;
 				sf = new StringBuilder();
 			} else {
-				// 不包含元素的时候，继续放入tempList
+				// 不包含元素的时候，继续放入
 				sf.append(tempStr);
 			}
 		}
