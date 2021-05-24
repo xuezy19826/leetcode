@@ -10,7 +10,7 @@ import java.util.*;
 public class Demo003 {
 
 	/**
-	 * 方法（自行思考）
+	 * 方法1（自行思考）
 	 * 耗时：4小时
 	 */
 	public static int method(String s){
@@ -36,12 +36,34 @@ public class Demo003 {
 		return Collections.max(res);
 	}
 
+	/**
+	 * 方法2（来自leetcode题目评价区）
+	 */
+	public static int method2(String s){
+		// 记录字符上一次出现的位置
+		int[] last = new int[128];
+		int n = s.length();
+		int res = 0;
+		// 窗口开始位置
+		int start = 0;
+		for(int i=0;i<n;i++){
+			// 获取字符对应的 unicode值
+			int index = s.charAt(i);
+			start = Math.max(start, last[index]);
+			res = Math.max(res, i - start + 1);
+			// 记录字符出现的位置
+			last[index] = i + 1;
+		}
+		return res;
+	}
+
 
 
 	public static void main(String[] args) {
 		// " " "aab"  "devdf"
 		String str = "abcabcbb";
-		System.out.println(method(str));
+//		System.out.println(method(str));
+		System.out.println(method2(str));
 	}
 
 }
