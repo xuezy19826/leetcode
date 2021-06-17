@@ -1,6 +1,6 @@
 package arrayandstr;
 
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * @author xuezy
@@ -12,43 +12,35 @@ public class Demo03 {
 	/**
 	 * @describe 以数组 intervals 表示若干个区间的集合，其中单个区间为 intervals[i] = [starti, endi] 。
 	 * 请你合并所有重叠的区间，并返回一个不重叠的区间数组，该数组需恰好覆盖输入中的所有区间。
+	 *
+	 * 总结：没想到有按照二维数组某个元素排序的方法可以直接调用导致写了好多代码
 	 */
 	public static int[][] merge(int[][] intervals) {
 		int n = intervals.length;
-		if(n == 1){
+		if(n == 0){
 			return intervals;
 		}
-		int[][] endary = new int[n][];
-		int i = 0;
-		int[] temp = null;
-		while (i < n) {
-			if(temp != null){
-				if(temp[0] >= intervals[i][0] && temp[0] <= intervals[i][1] ||
-								(temp[1] >= intervals[i][0] && temp[1] <= intervals[i][1])) {
-					temp[0] = Math.min(temp[0], intervals[i][0]);
-					temp[1] = Math.max(temp[1], intervals[i][1]);
-					endary = new int[n-1][];
-					endary[i - 1] = temp;
-				} else {
-					if (n == 2){
-						if(temp[1] > intervals[i][0] && temp[1] > intervals[i][1]){
-							endary[i - 1] = intervals[i];
-							endary[i] = temp;
-						} else {
-							endary[i - 1] = temp;
-							endary[i] = intervals[i];
-						}
-					} else {
-						temp = intervals[i];
-						endary[i - 1] = temp;
-					}
-				}
+		// 按照每行的第0列升序排列
+		Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
+		// 使用list存储数组
+		List<int[]> list = new ArrayList<>();
+		// 定义一个int类型的数组用于比较，默认为二维数组中第一个数组的值
+		int[] ints = intervals[0];
+		// 循环二维数组
+		for(int i = 1; i < n; i++){
+			// 如果第一个数组的右端点大于第二个数组的左端点，说明两个数组有交集
+			if(ints[1] >= intervals[i][0]){
+				// int类型的数组右端点等于两个数组中右端点大的那个值
+				ints[1] = Math.max(ints[1], intervals[i][1]);
 			} else {
-				temp = intervals[i];
+				// 比较没有重合 ints添加到数组中
+				list.add(ints);
+				// 重新赋值
+				ints = intervals[i];
 			}
-			i++;
 		}
-		return endary;
+		list.add(ints);
+		return list.toArray(new int[list.size()][2]);
 	}
 
 	public static void main(String[] args) {
@@ -87,6 +79,6 @@ public class Demo03 {
 //		System.out.println(Arrays.deepToString(merge(new int[][]{{1,4}, {0,4}})));
 //		System.out.println(Arrays.deepToString(merge(new int[][]{{1,4}, {0,0}})));
 //		System.out.println(Arrays.deepToString(merge(new int[][]{{1,4}, {0,1}})));
-		System.out.println(Arrays.deepToString(merge(new int[][]{{1,4}, {2,3}})));
+		System.out.println(Arrays.deepToString(merge(new int[][]{{1,4}, {0,2}, {3,5}})));
 	}
 }
